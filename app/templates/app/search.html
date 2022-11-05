@@ -1,0 +1,59 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Search{% endblock title %}
+
+
+{% block main-content %}
+  
+<div class="container mb-5">
+    <div class="row my-5">
+
+        {% if query %}
+            <p class="lead">Search for <strong>{{query}}</strong></p>
+        {% endif %}
+        
+        {% if result %}
+            {% for ob in result %}
+            <div class="row text-center">
+                <div class="col-md-3 mt-4">
+                    <div class="item mt-2 "><img src="{{ob.product_image.url}}" alt="" height="250px"> 
+                    <h4 clas s="fw-bold">{{ob.title}}</h4>
+                    <p class="fs-5">Rs. {{ob.discounted_price}}</p>
+                        <div class="text-center">
+                        <a href="{% url 'product-detail' ob.id %}" class="btn btn-outline-primary px-5">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+                {% endfor %}    
+            
+                 {% comment %} <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="item mt-2 "><img src="{{ob.product_image.url}}" alt="" height="250px"><span class="fw-bold mt-2">{{ob.title}}</span><br><span class="fs-5">Rs. {{ob.discounted_price}}</span>
+                            <div class="text-center">
+                            <a href="{% url 'product-detail' ob.id %}" class="btn btn-outline-primary px-5">View</a>
+                            </div>
+                        </div>
+                    </div>     
+                </div>  {% endcomment %}
+            
+            
+
+    {% endif %}
+
+    {% if not result %}
+                
+        <p class="lead">Here is no results for your <strong>{{query}}</strong></p>
+    
+    {% endif %}
+
+        
+    </div>
+
+</div>
+ 
+
+
+{% endblock main-content %}
+

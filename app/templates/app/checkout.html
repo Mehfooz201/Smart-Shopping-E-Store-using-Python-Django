@@ -1,0 +1,95 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock title %}
+
+{% block main-content %}
+<div class="container">
+ <div class="row mt-5">
+  <div class="col-sm-6">
+    <h4>Order Summary</h4>
+    <hr>
+    {% for cart in cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{cart.product.title}}</h5>
+          <p>Quantity: {{cart.quantity}}</p>
+          <p class="fw-bold">Price: {{cart.total_cost}} </p>
+        </div>
+      </div>
+      {% endfor %}
+      <p class="fw-bold">Total Cost + Rs. 250.0 (Tax)  =  Rs. {{total_amount}}</p>
+    <small>The Disclaimer for Limitation of Liability (also referred to as the Limitation of Liability) clause limits your exposure to potential lawsuits and subsequent damages. Because you're selling products, your chances of being held liable for something increases dramatically in comparison to just running a blog or something similar.</small>
+  </div>
+  <div class="col-sm-4 offset-sm-1">
+    <h4>Select Shipping Address</h4>
+    <hr>
+    <form action="/paymentdone" id='myform'>
+      {% csrf_token %}
+      {% for d in add %}
+        <div class="card">
+          <div class="card-body">
+          <h5>{{d.name}}</h5>
+          <p>Locality: {{d.locality}}, City: {{d.city}} - Zip: {{d.zipcode}}</p>
+          </div>
+        </div>
+        <div class="form-check mt-2 mb-5">
+          <input class="form-check-input" type="radio" value="{{d.id}}" name="custid" id="custadd{{forloop.counter}}">
+          <label class="form-check-label fw-bold" for="">
+            Address: {{forloop.counter}}</label>
+        </div>
+        {% endfor %}
+
+        <!-- Set up a container element for the button -->
+        {% comment %} <div id="paypal-button-container"></div> {% endcomment %}
+
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}
+
+
+
+{% comment %} Paypal payment gateway {% endcomment %}
+{% block payment-gateway %}
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+
+<script>
+  // Render the PayPal button into #paypal-button-container
+  paypal.Buttons({
+
+      // Set up the transaction
+      createOrder: function(data, actions) {
+          return actions.order.create({
+              purchase_units: [{
+                  amount: {
+                      value: '{{total_amount}}'
+                  }
+              }]
+          });
+      },
+
+      // Finalize the transaction
+      onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+              // Successful capture! For demo purposes:
+              //console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+              //var transaction = orderData.purchase_units[0].payments.captures[0];
+              alert('Transaction completed by : ' + details.payer.name.given_name + " !");
+              document.getElementById("myform").submit();
+
+          });
+      }
+
+
+  }).render('#paypal-button-container');
+
+</script>
+
+{% endblock payment-gateway %}
