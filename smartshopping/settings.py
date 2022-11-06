@@ -23,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # django-insecure-&qz_u1ass^kqw14m@%vo2k@#h)vvv28m5lz2svl$@&knt+r8h*
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ['django-insecure-&qz_u1ass^kqw14m@%vo2k@#h)vvv28m5lz2svl$@&knt+r8h*']
+SECRET_KEY = 'django-insecure-&qz_u1ass^kqw14m@%vo2k@#h)vvv28m5lz2svl$@&knt+r8h*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
