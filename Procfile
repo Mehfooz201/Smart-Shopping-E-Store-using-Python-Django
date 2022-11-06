@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT smartshopping.wsgi:application
+web: gunicorn smartshopping.wsgi --log-file -
