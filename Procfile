@@ -1,1 +1,1 @@
-web: gunicorn smartshopping.wsgi --log-file -
+web: gunicorn app:app
